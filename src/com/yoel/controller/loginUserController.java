@@ -1,8 +1,6 @@
 package com.yoel.controller;
 /**
  * author 1672063 Yoel Oscar
- *
- *
  */
 
 
@@ -25,40 +23,38 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
-public class loginUserController implements Initializable{
+public class loginUserController implements Initializable {
     @FXML
     private GridPane gridUserPane;
     @FXML
     private TextField emailUser;
     @FXML
     private TextField passUser;
-
     @FXML
     private Stage mainStage;
+    private UserDaoImplementation userDao;
 
     @FXML
     private void logUserOnAction(ActionEvent actionEvent) throws SQLException, ClassNotFoundException, IOException {
-
-        if (emailUser.getText().isEmpty()) {
-
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText("Silahkan isi email anda");
-            alert.showAndWait();
-        } else if (passUser.getText().isEmpty()) {
-
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText("Silahkan isi password anda");
-            alert.showAndWait();
-        }
-        if (emailUser.getText().isEmpty() && passUser.getText().isEmpty()) {
+        String emailData = emailUser.getText();
+        String pwdData = passUser.getText();
+        if (emailData.isEmpty() || pwdData.isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText("Silahkan isi email dan password anda");
             alert.showAndWait();
+        } else {
+            try {
+                User user = userDao.login(emailData, pwdData);
+                if (user != null && user.getEmail().equals(emailData)) {
+                    //  TODO Call Main Stage
+                }
+            } catch (ClassNotFoundException | SQLException e) {
+                e.printStackTrace();
+            }
         }
-
-
     }
-    public void start(Stage primaryStage) throws Exception{
+
+    public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("view/mainUserView.fxml"));
         primaryStage.setTitle("1672063-Yoel Oscar Werinussa");
         primaryStage.setScene(new Scene(root));
@@ -67,21 +63,7 @@ public class loginUserController implements Initializable{
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        UserDaoImplementation usrDao = new UserDaoImplementation();
-        String emailData = emailUser.getText();
-        String pwdData = passUser.getText();
-        try {
-            usrDao.login(emailData,pwdData);
-            if(usrDao !=null && usrDao.equals(emailData)){
-                try {
-                    start(mainStage);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
-        }
+        userDao = new UserDaoImplementation();
     }
 }
 
