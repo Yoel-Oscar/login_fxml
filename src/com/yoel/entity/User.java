@@ -1,14 +1,12 @@
 package com.yoel.entity;
 
 /**
- * author 1672063 Yoel Oscar
+ * @author 1672063 Yoel Oscar
  */
-
-
 public class User {
 
     private int id;
-    private String nama;
+    private String name;
     private String email;
     private String password;
 
@@ -20,12 +18,12 @@ public class User {
         this.id = id;
     }
 
-    public String getNama() {
-        return nama;
+    public String getName() {
+        return name;
     }
 
-    public void setNama(String nama) {
-        this.nama = nama;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getEmail() {
